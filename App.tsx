@@ -37,7 +37,15 @@ export default function App() {
           >
             <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="Verification" component={VerificationScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                headerStyle: {
+                  backgroundColor: `red`,
+                },
+              }}
+            />
           </Stack.Navigator>
         )}
         {/* Rest of your app code */}
