@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, TextInput } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Octicons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 
 const VerificationScreen = ({ navigation }: any) => {
   const [otpCode, setOTPCode] = useState<string>("");
@@ -42,6 +43,7 @@ const VerificationScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <Image source={require("../assets/logo.png")} />
         <Text style={styles.gettingStarted}>Enter 4-digits code</Text>

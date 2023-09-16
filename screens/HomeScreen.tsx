@@ -1,57 +1,80 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 import React from "react";
+import Slider from "../components/Slider";
+import CallUs from "../components/CallUs";
+import Navbar from "../components/Navbar";
+
+const screenHeight = Dimensions.get("window").height;
+
+// Calculate 30% of the screen height
+const thirtyPercentHeight = screenHeight * 0.3;
 
 const HomeScreen = ({ navigation }: any) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          style={styles.headerBackground}
-          source={require("../assets/EllipseHeader.png")}
-        />
-        <View style={styles.headerRow}>
-          <Text style={styles.headerText}>Hello, Aya!</Text>
-          <TouchableOpacity>
-            <Text
-              style={styles.headerText}
-              onPress={() =>
-                navigation.reset({
-                  index: 0, // The index of the screen to navigate to (0 is the first screen)
-                  routes: [{ name: "Register" }], // The new stack of screens to reset to
-                })
-              }
-            >
-              Logout
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.balance}>
-          <Text style={styles.headerText}>Your Wallet Balance is</Text>
-          <TouchableOpacity>
-            <Image source={require("../assets/info-circle.png")} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.amount}>
-          <Text style={styles.headerTextAmount}>SAR</Text>
-          <Text style={styles.headerAmount}>100</Text>
-        </View>
-      </View>
-      <View style={styles.invoiceContainer}>
-        <View style={styles.leftInvoice}>
-          <View style={styles.invoiceText}>
-            <Text style={styles.invoiceText}>
-              Scan invoice QR code and get your
-            </Text>
-            <Text style={styles.invoiceCachback}>CASHBACK</Text>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <Image
+            style={styles.headerBackground}
+            source={require("../assets/EllipseHeader.png")}
+          />
+          <View style={styles.headerRow}>
+            <Text style={styles.headerText}>Hello, Aya!</Text>
+            <TouchableOpacity>
+              <Text
+                style={styles.headerText}
+                onPress={() =>
+                  navigation.reset({
+                    index: 0, // The index of the screen to navigate to (0 is the first screen)
+                    routes: [{ name: "Register" }], // The new stack of screens to reset to
+                  })
+                }
+              >
+                Logout
+              </Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.invoiceButton}>
-            <Text style={styles.invoiceButtonText}>Know More</Text>
-          </TouchableOpacity>
+          <View style={styles.balance}>
+            <Text style={styles.headerText}>Your Wallet Balance is</Text>
+            <TouchableOpacity>
+              <Image source={require("../assets/info-circle.png")} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.amount}>
+            <Text style={styles.headerTextAmount}>SAR</Text>
+            <Text style={styles.headerAmount}>100</Text>
+          </View>
         </View>
-        <View style={styles.rightInvoice}>
-          <Image source={require("../assets/invoiceImg.png")} />
+        <View style={styles.invoiceContainer}>
+          <View style={styles.leftInvoice}>
+            <View style={styles.invoiceText}>
+              <Text style={styles.invoiceText}>
+                Scan invoice QR code and get your
+              </Text>
+              <Text style={styles.invoiceCachback}>CASHBACK</Text>
+            </View>
+            <TouchableOpacity style={styles.invoiceButton}>
+              <Text style={styles.invoiceButtonText}>Know More</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.rightInvoice}>
+            <Image source={require("../assets/invoiceImg.png")} />
+          </View>
         </View>
-      </View>
+
+        <Slider data={[1, 2, 3]} />
+
+        <CallUs />
+      </ScrollView>
+      <Navbar />
     </View>
   );
 };
@@ -59,13 +82,14 @@ const HomeScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: `#F3F3F3`,
   },
   header: {
     backgroundColor: `#003`,
     borderBottomEndRadius: 30,
     borderBottomStartRadius: 30,
     border: null,
-    height: `30%`,
+    height: thirtyPercentHeight,
   },
   headerRow: {
     flexDirection: `row`,

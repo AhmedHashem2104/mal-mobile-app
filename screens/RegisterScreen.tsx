@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
+import { StatusBar } from "expo-status-bar";
 
 const RegisterScreen = ({ navigation }: any) => {
   const [disabled, setDisabled] = useState<boolean>(true);
@@ -24,6 +25,7 @@ const RegisterScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <Image source={require("../assets/logo.png")} />
         <Text style={styles.gettingStarted}>Getting Started</Text>

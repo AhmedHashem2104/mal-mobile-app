@@ -50,7 +50,7 @@ export default function App() {
         )}
         {/* Rest of your app code */}
       </NavigationContainer>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </View>
   );
 }
