@@ -1,21 +1,33 @@
 import { View, Text, StyleSheet, Image, TextInput } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Octicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import apis from "../apis/apis";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContextAPI } from "../context/AuthContext";
 
-const VerificationScreen = ({ navigation }: any) => {
+const VerificationScreen = ({ navigation, route }: any) => {
   const [otpCode, setOTPCode] = useState<string>("");
   const [isPinReady, setIsPinReady] = useState<boolean>(false);
   const inputRef = useRef<TextInput | null>(null);
   const maximumCodeLength = 4;
   const boxArray = new Array(maximumCodeLength).fill(0);
+  const [phoneNumber] = useState(route.params.phoneNumber);
+  const [isError, setIsError] = useState<boolean>(false);
+  const { setAuthenticated }: any = useContext(AuthContextAPI);
 
   const boxDigit = (_: any, index: number) => {
     const emptyInput = "";
     const digit = otpCode[index] || emptyInput;
 
     return (
-      <View style={styles.SplitBoxes} key={index}>
+      <View
+        style={[
+          styles.SplitBoxes,
+          isError && otpCode.length === 4 && { borderColor: `red` },
+        ]}
+        key={index}
+      >
         <Text style={styles.SplitBoxText}>
           {digit && <Octicons name="dot-fill" size={24} color="black" />}
         </Text>
@@ -23,12 +35,33 @@ const VerificationScreen = ({ navigation }: any) => {
     );
   };
 
+  const handleCheckVerification = async () => {
+    if (parseInt(otpCode) !== 1234) {
+      setIsError(true);
+      return;
+    }
+    await apis
+      .verifyOTP({
+        phone: phoneNumber,
+        otp: parseInt(otpCode),
+      })
+      .then(async (res) => {
+        setIsError(false);
+        await AsyncStorage.setItem("token", res.data.token);
+        setAuthenticated(true);
+        navigation.reset({
+          index: 0, // The index of the screen to navigate to (0 is the first screen)
+          routes: [{ name: "Home" }], // The new stack of screens to reset to
+        });
+      })
+      .catch(() => {
+        setIsError(true);
+      });
+  };
+
   useEffect(() => {
     if (isPinReady) {
-      navigation.reset({
-        index: 0, // The index of the screen to navigate to (0 is the first screen)
-        routes: [{ name: "Home" }], // The new stack of screens to reset to
-      });
+      handleCheckVerification();
     }
   }, [isPinReady]);
 

@@ -8,10 +8,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import apis from "../apis/apis";
 
 const RegisterScreen = ({ navigation }: any) => {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [isError, setIsError] = useState<boolean>(false);
 
   const handleChange = (text: string) => {
     setDisabled(text ? false : true);
@@ -20,7 +22,16 @@ const RegisterScreen = ({ navigation }: any) => {
 
   const handleSubmit = async () => {
     setDisabled(true);
-    navigation.push("Verification");
+    await apis
+      .sendOTP({ phone: phoneNumber })
+      .then(() => {
+        navigation.push("Verification", {
+          phoneNumber,
+        });
+      })
+      .catch(() => {
+        setIsError(true);
+      });
   };
 
   return (
@@ -33,7 +44,14 @@ const RegisterScreen = ({ navigation }: any) => {
         <TextInput
           value={phoneNumber}
           onChangeText={handleChange}
-          style={styles.input}
+          style={[
+            styles.input,
+            isError
+              ? { borderColor: `red` }
+              : {
+                  borderColor: `#C5C6CC`,
+                },
+          ]}
           keyboardType="number-pad"
         />
 

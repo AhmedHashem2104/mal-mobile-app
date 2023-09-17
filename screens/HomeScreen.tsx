@@ -7,10 +7,11 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Slider from "../components/Slider";
 import CallUs from "../components/CallUs";
 import Navbar from "../components/Navbar";
+import { AuthContextAPI } from "../context/AuthContext";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -18,6 +19,14 @@ const screenHeight = Dimensions.get("window").height;
 const thirtyPercentHeight = screenHeight * 0.3;
 
 const HomeScreen = ({ navigation }: any) => {
+  const { loading, authenticated, logout }: any = useContext(AuthContextAPI);
+  if (loading) return;
+
+  if (!authenticated)
+    navigation.reset({
+      index: 0, // The index of the screen to navigate to (0 is the first screen)
+      routes: [{ name: "Register" }], // The new stack of screens to reset to
+    });
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
@@ -31,12 +40,9 @@ const HomeScreen = ({ navigation }: any) => {
             <TouchableOpacity>
               <Text
                 style={styles.headerText}
-                onPress={() =>
-                  navigation.reset({
-                    index: 0, // The index of the screen to navigate to (0 is the first screen)
-                    routes: [{ name: "Register" }], // The new stack of screens to reset to
-                  })
-                }
+                onPress={() => {
+                  logout();
+                }}
               >
                 Logout
               </Text>
